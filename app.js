@@ -60,7 +60,7 @@ var app = function(){
       temp_path += path[i] + '/';
       $(a).text(path[i] + '/');
       a.title = base_dir + temp_path.substring(1);
-      $(a).click(function(){
+      $(a).on("click", function(){
         cd(this.title);
       });
       $(".current-dir").append(a);
@@ -83,13 +83,13 @@ var app = function(){
       $(".browser-view a").each(function(i, element){
         if (element.pathname.slice(-1) == "/" ) {
           // open directories
-          $(element).click(function(e) {
+          $(element).on("click", function(e) {
             e.preventDefault();
             cd(element.pathname);
           });
         } else if (isImage(element.pathname)) {
           // show image previews
-          $(element).click(function(e) {
+          $(element).on("click", function(e) {
             e.preventDefault();
             showPreview(element.pathname);
           });
@@ -149,13 +149,13 @@ var app = function(){
   }
 
   // add various event handlers
-  $('.file-view-prev').click(function(){
+  $('.file-view-prev').on("click", function(){
     showPreview(prev_img);
   });
-  $('.file-view-next').click(function(){
+  $('.file-view-next').on("click", function(){
     showPreview(next_img);
   });
-  $("body").keydown(function(event) {
+  $("body").on("keydown", function(event) {
     switch (event.which) {
       case 27: // ESC
         closePreview();
@@ -168,8 +168,8 @@ var app = function(){
         break;
     }
   });
-  $(".bg-translucent").click(closePreview);
-  $('.base-dir-icon').click(function(){
+  $(".bg-translucent").on("click", closePreview);
+  $('.base-dir-icon').on("click", function(){
     cd(base_dir);
   });
 
