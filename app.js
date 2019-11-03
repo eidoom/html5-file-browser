@@ -34,7 +34,7 @@ var app = function(){
     }
     imgCache.push(file);
   }
-a
+
   // check if the given path points to an image
   function isImage(path) {
     return $.inArray(path.split('.').pop().toLowerCase(), IMG_EXTENSIONS) != -1;
@@ -56,14 +56,14 @@ a
 
     var temp_path = "";
     for (var i=0; i<path.length-1; i++) {
-      var a = document.createElement('a');
+      var sub_path = document.createElement('a');
       temp_path += path[i] + '/';
-      $(a).text(path[i] + '/');
-      a.title = base_dir + temp_path.substring(1);
-      $(a).on("click", function(){
+      $(sub_path).text(path[i] + '/');
+      sub_path.title = base_dir + temp_path.substring(1);
+      $(sub_path).on("click", function(){
         cd(this.title);
       });
-      $(".current-dir").append(a);
+      $(".current-dir").append(sub_path);
     }
 
     // retrieve the contents of the directory
