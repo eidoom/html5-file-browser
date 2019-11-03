@@ -41,7 +41,9 @@ var app = function(){
   }
 
   function isValidTile(name) {
+    if (name[0] != "."){
     return $.inArray(name, IGNORED_ELEMENTS) == -1;
+    }
   }
 
   // load the contents of the given directory
