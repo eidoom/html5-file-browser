@@ -20,11 +20,11 @@ var app = function(){
     var title = document.createElement('span');
     title.innerText = decodeURIComponent(name);
 
-    var a = document.createElement('a');
-    a.href = href+name;
-    a.appendChild(glyphicon);
-    a.appendChild(title);
-    return a;
+    var tile = document.createElement('a');
+    tile.href = href+name;
+    tile.appendChild(glyphicon);
+    tile.appendChild(title);
+    return tile;
   }
 
   // cache an image for future usage
@@ -34,7 +34,7 @@ var app = function(){
     }
     imgCache.push(file);
   }
-
+a
   // check if the given path points to an image
   function isImage(path) {
     return $.inArray(path.split('.').pop().toLowerCase(), IMG_EXTENSIONS) != -1;
