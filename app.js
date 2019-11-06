@@ -3,6 +3,7 @@ var app = function () {
         current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
         IMG_EXTS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'],
         AUD_EXTS = ['ogg', 'opus', 'aac', 'm4a', 'mp3', 'flac', 'caf'],
+        ARC_EXTS = ['tar', 'zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'lzma'],
         IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
         imgCache = [],
         prev_img = "",
@@ -28,6 +29,11 @@ var app = function () {
         return $.inArray(getExt(path), AUD_EXTS) !== -1;
     }
 
+    // check if the given path points to an archive file
+    function isArchive(path) {
+        return $.inArray(getExt(path), ARC_EXTS) !== -1;
+    }
+
     // create a tile
     function createTile(href, name) {
         var icon_span = document.createElement('span'),
@@ -45,6 +51,8 @@ var app = function () {
                 icon.className = "fas fa-file-image";
             } else if (isAudio(name)) {
                 icon.className = "fas fa-file-audio";
+            } else if (isArchive(name)) {
+              icon.className = "fas fa-file-archive";
             } else {
                 icon.className = "fas fa-file";
             }
