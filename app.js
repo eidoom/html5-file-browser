@@ -23,9 +23,11 @@ var app = function(){
   // create a tile
   function createTile(href, name) {
     var icon_span = document.createElement('span'),
-        icon = document.createElement('i');
-    var title = document.createElement('span');
-    var tile = document.createElement('a');
+        icon = document.createElement('i'),
+        title = document.createElement('span'),
+        tile = document.createElement('a'),
+        moniker;
+
     if (isFolder(name)) {
 		moniker = name.slice(0,-1);
         icon.className = "fas fa-folder";
@@ -37,14 +39,16 @@ var app = function(){
             icon.className = "fas fa-file";
     	}
 	}
-    icon.setAttribute('aria-hidden', 'true');
-    icon_span.appendChild(icon);
-
-    title.innerText = decodeURIComponent(moniker);
 
     tile.href = href+name;
+
+    icon.setAttribute('aria-hidden', 'true');
+    icon_span.appendChild(icon);
     tile.appendChild(icon_span);
+
+    title.innerText = decodeURIComponent(moniker);
     tile.appendChild(title);
+
     return tile;
   }
 
