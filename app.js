@@ -50,9 +50,9 @@ const app = function () {
             moniker = name;
             if (isImage(name)) {
                 icon.className = "fas fa-image";
-            } else if (isSomething(getExt(path), AUDIO_EXTENSIONS)) {
+            } else if (isSomething(getExt(name), AUDIO_EXTENSIONS)) {
                 icon.className = "fas fa-audio";
-            } else if (isSomething(getExt(path), ARCHIVE_EXTENSIONS)) {
+            } else if (isSomething(getExt(name), ARCHIVE_EXTENSIONS)) {
                 icon.className = "fas fa-file-archive";
             } else if (isSomething(getExt(name), CODE_EXTENSIONS)) {
                 icon.className = "fas fa-code";
