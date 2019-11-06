@@ -1,14 +1,11 @@
 var app = function () {
-    var base_dir = (location.pathname.replace('/index.html', '/') +
-        "/files/").replace(/\/\//g, '/');
-    var current_dir = (base_dir + location.hash.substring(1) +
-        '/').replace(/\/\//g, '/');
-    var IMG_EXTENSIONS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'];
-    var IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description',
-        'Parent Directory'];
-    var imgCache = [];
-    var prev_img = "";
-    var next_img = "";
+    var base_dir = (location.pathname.replace('/index.html', '/') + "/files/").replace(/\/\//g, '/'),
+        current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
+        IMG_EXTENSIONS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'],
+        IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
+        imgCache = [],
+        prev_img = "",
+        next_img = "";
 
     // check if the given path points to an image
     function isImage(path) {
@@ -75,9 +72,8 @@ var app = function () {
 
         // show the location bar
         $(".current-dir").text('');
-        var path = current_dir.replace(base_dir, '/').split('/');
-
-        var temp_path = "";
+        var path = current_dir.replace(base_dir, '/').split('/'),
+            temp_path = "";
         for (var i = 0; i < path.length - 1; i++) {
             var sub_path = document.createElement('a');
             temp_path += path[i] + '/';
@@ -91,7 +87,7 @@ var app = function () {
 
         // retrieve the contents of the directory
         $.get(current_dir, function (data) {
-            html = $.parseHTML(data);
+            var html = $.parseHTML(data);
             $(".browser-view").html("");
 
             // create tiles
@@ -134,10 +130,10 @@ var app = function () {
             $(".file-view-img").css('padding-top', '0');
             $(".file-view-img").attr('src', filepath);
             $(".file-view-img").fadeIn();
-            var scale_width = 0.8 * $(window).width() / img.width;
-            var scale_height = 0.8 * $(window).height() / img.height;
-            var imgWidth = img.width * Math.min(scale_width, scale_height);
-            var imgHeight = img.height * Math.min(scale_width, scale_height);
+            var scale_width = 0.8 * $(window).width() / img.width,
+                scale_height = 0.8 * $(window).height() / img.height,
+                imgWidth = img.width * Math.min(scale_width, scale_height),
+                imgHeight = img.height * Math.min(scale_width, scale_height);
             $(".file-view-wrapper").css('left', ($(document).width() - imgWidth) / 2);
             $(".file-view-wrapper").css('width', imgWidth);
             $(".file-view-wrapper").css('height', imgHeight);
@@ -147,19 +143,25 @@ var app = function () {
         cacheImage(filepath);
 
         // search for the previous and next image to be displayed
-        var first_img = "";
-        var last_img = "";
+        var first_img = "",
+            last_img = "",
+            img_found = false;
         prev_img = "";
         next_img = "";
-        var img_found = false;
         $(".browser-view a").each(function (i, element) {
             if (isImage(element.pathname)) {
-                if (first_img === "") first_img = element.pathname;
+                if (first_img === "") {
+                    first_img = element.pathname;
+                }
                 if (img_found && next_img === "") {
                     next_img = element.pathname;
                 }
-                if (element.pathname === filepath) img_found = true;
-                if (!img_found) prev_img = element.pathname;
+                if (element.pathname === filepath) {
+                    img_found = true;
+                }
+                if (!img_found) {
+                    prev_img = element.pathname;
+                }
                 last_img = element.pathname;
             }
         });
