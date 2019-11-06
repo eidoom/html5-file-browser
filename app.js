@@ -12,12 +12,12 @@ var app = function(){
 
   // check if the given path points to an image
   function isImage(path) {
-    return $.inArray(path.split('.').pop().toLowerCase(), IMG_EXTENSIONS) != -1;
+    return $.inArray(path.split('.').pop().toLowerCase(), IMG_EXTENSIONS) !== -1;
   }
 
   // check if the given path points to a folder
   function isFolder(path) {
-    return path.slice(-1) == '/';
+    return path.slice(-1) === '/';
   }
 
   // create a tile
@@ -51,15 +51,15 @@ var app = function(){
   // cache an image for future usage
   function cacheImage(file) {
     for (var i=0; i<imgCache.length; i++) {
-      if (imgCache[i].src == file) return;
+      if (imgCache[i].src === file) return;
     }
     imgCache.push(file);
   }
 
   // check if file should be displayed as tile
   function isValidTile(name) {
-    if (name.charAt(0) != ".") {
-        return $.inArray(name, IGNORED_ELEMENTS) == -1;
+    if (name.charAt(0) !== ".") {
+        return $.inArray(name, IGNORED_ELEMENTS) === -1;
     }
   }
 
@@ -100,7 +100,7 @@ var app = function(){
 
       // add events to tiles
       $(".browser-view a").each(function(i, element){
-        if (element.pathname.slice(-1) == "/" ) {
+        if (element.pathname.slice(-1) === "/" ) {
           // open directories
           $(element).on("click", function(e) {
             e.preventDefault();
@@ -152,7 +152,7 @@ var app = function(){
       if (isImage(element.pathname)) {
         if (first_img === "") first_img = element.pathname;
         if (img_found && next_img === "") { next_img = element.pathname; }
-        if (element.pathname == filepath) img_found = true;
+        if (element.pathname === filepath) img_found = true;
         if (!img_found) prev_img = element.pathname;
         last_img = element.pathname;
       }
