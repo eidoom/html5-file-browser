@@ -35,8 +35,8 @@ const app = function () {
         return path.slice(-1) === '/';
     }
 
-    // create a folder tile
-    function createFolderTile(href, name) {
+    // initialise tile
+    function initTile(href, name) {
         const icon_span = document.createElement('span'),
             icon = document.createElement('i'),
             title = document.createElement('span'),
@@ -59,15 +59,19 @@ const app = function () {
         title.innerText = decodeURIComponent(name.slice(0, -1));
         tile.appendChild(title);
 
+        return [icon, tile];
+    }
+
+    // create a folder tile
+    function createFolderTile(href, name) {
+        [icon, tile] = initTile(href, name);
+        icon.className = "fas fa-folder";
         return tile;
     }
 
     // create a file tile
     function createFileTile(href, name) {
-        const icon_span = document.createElement('span'),
-            icon = document.createElement('i'),
-            title = document.createElement('span'),
-            tile = document.createElement('a');
+        [icon, tile] = initTile(href, name);
 
         if (isImage(name)) {
             icon.className = "fas fa-image";
@@ -94,22 +98,6 @@ const app = function () {
         } else {
             icon.className = "fas fa-file";
         }
-
-        // doesn't work for folders
-        // const max_len = 30;
-        // if (moniker.length > max_len) {
-        //     console.log(moniker.slice(0, max_len - 3) + '...');
-        //     moniker = moniker.slice(0, max_len - 3) + '...';
-        // }
-
-        tile.href = href + name;
-
-        icon.setAttribute('aria-hidden', 'true');
-        icon_span.appendChild(icon);
-        tile.appendChild(icon_span);
-
-        title.innerText = decodeURIComponent(name);
-        tile.appendChild(title);
 
         return tile;
     }
