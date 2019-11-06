@@ -1,20 +1,31 @@
 var app = function () {
     var base_dir = (location.pathname.replace('/index.html', '/') + "/files/").replace(/\/\//g, '/'),
         current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
-        IMG_EXTENSIONS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'],
+        IMG_EXTS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'],
+        AUD_EXTS = ['ogg', 'opus', 'aac', 'm4a', 'mp3', 'flac', 'caf'],
         IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
         imgCache = [],
         prev_img = "",
         next_img = "";
 
+    // gets extension (suffix) of file name or file pointed to by path
+    function getExt(path) {
+        return path.split('.').pop().toLowerCase();
+    }
+
     // check if the given path points to an image
     function isImage(path) {
-        return $.inArray(path.split('.').pop().toLowerCase(), IMG_EXTENSIONS) !== -1;
+        return $.inArray(getExt(path), IMG_EXTS) !== -1;
     }
 
     // check if the given path points to a folder
     function isFolder(path) {
         return path.slice(-1) === '/';
+    }
+
+    // check if the given path points to an audio file
+    function isAudio(path) {
+        return $.inArray(getExt(path), AUD_EXTS) !== -1;
     }
 
     // create a tile
@@ -32,6 +43,8 @@ var app = function () {
             moniker = name;
             if (isImage(name)) {
                 icon.className = "fas fa-file-image";
+            } else if (isAudio(name)) {
+                icon.className = "fas fa-file-audio";
             } else {
                 icon.className = "fas fa-file";
             }
