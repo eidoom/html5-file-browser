@@ -56,23 +56,25 @@ const app = function () {
         icon_span.appendChild(icon);
         tile.appendChild(icon_span);
 
-        title.innerText = decodeURIComponent(name.slice(0, -1));
         tile.appendChild(title);
 
-        return [icon, tile];
+        return [icon, tile, title];
     }
 
     // create a folder tile
     function createFolderTile(href, name) {
-        [icon, tile] = initTile(href, name);
+        [icon, tile, title] = initTile(href, name);
+        title.innerText = decodeURIComponent(name.slice(0, -1));
         icon.className = "fas fa-folder";
         return tile;
     }
 
     // create a file tile
     function createFileTile(href, name) {
-        [icon, tile] = initTile(href, name);
+        [icon, tile, title] = initTile(href, name);
 
+        title.innerText = decodeURIComponent(name);
+		
         if (isImage(name)) {
             icon.className = "fas fa-image";
         } else if (isSomething(getExt(name), AUDIO_EXTENSIONS)) {
