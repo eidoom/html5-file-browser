@@ -141,23 +141,24 @@ const app = function () {
             const html = $.parseHTML(data);
             $(".browser-view").html("");
 
+            let files = [];
+
             // create tiles for folders
             $(html).find("a").each(function (i, element) {
                 const name = element.getAttribute('href');
-                if (isFolder(name) && isValidTile(name)) {
-                    $(".browser-view").append(
-                        createFolderTile(current_dir, name));
+                if (isValidTile(name)) {
+                    if (isFolder(name)) {
+                        $(".browser-view").append(createFolderTile(current_dir, name));
+                    } else {
+                        files.push(name);
+                    }
                 }
             });
 
             // create tiles for files
-            $(html).find("a").each(function (i, element) {
-                const name = element.getAttribute('href');
-                if (!isFolder(name) && isValidTile(name)) {
-                    $(".browser-view").append(
-                        createFileTile(current_dir, name));
-                }
-            });
+            for (const name of files) {
+                $(".browser-view").append(createFileTile(current_dir, name));
+            }
 
             // add events to tiles
             $(".browser-view a").each(function (i, element) {
@@ -175,7 +176,8 @@ const app = function () {
                     });
                 }
             });
-        });
+        })
+        ;
     }
 
     // show an image preview of the given file
