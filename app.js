@@ -4,9 +4,11 @@ const app = function () {
         AUDIO_EXTENSIONS = ['ogg', 'opus', 'aac', 'm4a', 'mp3', 'flac', 'caf'],
         ARCHIVE_EXTENSIONS = ['tar', 'zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'lzma'],
         IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
-        CODE_EXTENSIONS = ['js', 'html', 'css', 'py', 'cpp', 'c', 'h', 'hpp', 'tex'],
-        CODE_FILES = ['Makefile'],
-        TEXT_EXTENSIONS = ['md', 'txt'],
+        CODE_EXTENSIONS = ['js', 'html', 'css', 'cpp', 'c', 'h', 'hpp', 'tex', 'sh'],
+        COMPILE_FILES = ['Makefile'],
+        COMPILE_EXTENSIONS = ['cmake'],
+        TEXT_EXTENSIONS = ['md', 'txt', 'rst'],
+        CONFIG_EXTENSIONS = ['toml', 'yaml', 'json', 'conf', 'cfg', 'ini', 'yml'],
         VIDEO_EXTENSIONS = ['mkv', 'mp4'];
 
     let current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
@@ -55,7 +57,12 @@ const app = function () {
 
     // check if the given name points to a code file
     function isCode(name) {
-        return isSomething(getExt(name), CODE_EXTENSIONS) || isSomething(name, CODE_FILES);
+        return isSomething(getExt(name), CODE_EXTENSIONS);
+    }
+
+    // check if the given name points to a compilation configuration file
+    function isCompile(name) {
+        return isSomething(name, COMPILE_FILES) || isSomething(getExt(name), COMPILE_EXTENSIONS);
     }
 
     // check if the given name points to a video file
@@ -68,9 +75,24 @@ const app = function () {
         return isSomething(getExt(name), TEXT_EXTENSIONS);
     }
 
-    // check if the given name points to a text file
+    // check if the given name points to a pdf file
     function isPDF(name) {
         return getExt(name) === 'pdf';
+    }
+
+    // check if the given name points to a config file
+    function isConfig(name) {
+        return isSomething(getExt(name), CONFIG_EXTENSIONS);
+    }
+
+    // check if the given name points to a python file
+    function isPython(name) {
+        return getExt(name) === 'py';
+    }
+
+    // check if the given name points to a torrent file
+    function isTorrent(name) {
+        return getExt(name) === 'torrent';
     }
 
     // create a tile
@@ -87,19 +109,27 @@ const app = function () {
         } else {
             moniker = name;
             if (isImage(name)) {
-                icon.className = "fas fa-file-image";
+                icon.className = "fas fa-image";
             } else if (isAudio(name)) {
-                icon.className = "fas fa-file-audio";
+                icon.className = "fas fa-audio";
             } else if (isArchive(name)) {
                 icon.className = "fas fa-file-archive";
             } else if (isCode(name)) {
-                icon.className = "fas fa-file-code";
+                icon.className = "fas fa-code";
             } else if (isVideo(name)) {
-                icon.className = "fas fa-file-video";
+                icon.className = "fas fa-video";
             } else if (isText(name)) {
                 icon.className = "fas fa-file-signature";
             } else if (isPDF(name)) {
                 icon.className = "fas fa-file-pdf";
+            } else if (isConfig(name)) {
+                icon.className = "fas fa-cog";
+            } else if (isCompile(name)) {
+                icon.className = "fas fa-hammer";
+            } else if (isPython(name)) {
+                icon.className = "fab fa-python";
+            } else if (isTorrent(name)) {
+                icon.className = "fas fa-file-download";
             } else {
                 icon.className = "fas fa-file";
             }
