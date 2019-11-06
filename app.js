@@ -6,6 +6,7 @@ var app = function () {
         ARCHIVE_EXTENSIONS = ['tar', 'zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'lzma'],
         IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
         CODE_EXTENSIONS = ['js', 'html', 'css', 'py', 'cpp', 'c', 'h', 'hpp'],
+        VIDEO_EXTENSIONS = ['mkv', 'mp4'],
         imgCache = [],
         prev_img = "",
         next_img = "";
@@ -49,9 +50,14 @@ var app = function () {
         return isSomething(name, IGNORED_ELEMENTS);
     }
 
-    // check if the given name points to an ignored file name
+    // check if the given name points to a code file
     function isCode(name) {
         return isSomething(getExt(name), CODE_EXTENSIONS);
+    }
+
+    // check if the given name points to a video file
+    function isVideo(name) {
+        return isSomething(getExt(name), VIDEO_EXTENSIONS);
     }
 
     // create a tile
@@ -75,6 +81,8 @@ var app = function () {
                 icon.className = "fas fa-file-archive";
             } else if (isCode(name)) {
                 icon.className = "fas fa-file-code";
+            } else if (isVideo(name)) {
+                icon.className = "fas fa-file-video";
             } else {
                 icon.className = "fas fa-file";
             }
