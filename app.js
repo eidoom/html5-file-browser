@@ -10,19 +10,40 @@ var app = function(){
   var prev_img = "";
   var next_img = "";
 
+  // check if the given path points to an image
+  function isImage(path) {
+    return $.inArray(path.split('.').pop().toLowerCase(), IMG_EXTENSIONS) != -1;
+  }
+
+  // check if the given path points to a folder
+  function isFolder(path) {
+    return path.slice(-1) == '/';
+  }
 
   // create a tile
   function createTile(href, name) {
-    var glyphicon = document.createElement('span');
-    glyphicon.cassName = "glyphicon glyphicon-file";
-    glyphicon.setAttribute('aria-hidden', 'true');
-
+    var icon_span = document.createElement('span'),
+        icon = document.createElement('i');
     var title = document.createElement('span');
-    title.innerText = decodeURIComponent(name);
-
     var tile = document.createElement('a');
+    if (isFolder(name)) {
+		moniker = name.slice(0,-1);
+        icon.className = "fas fa-folder";
+	} else {
+		moniker = name;
+	    if (isImage(name)) {
+	    	icon.className = "fas fa-file-image";
+        } else {
+            icon.className = "fas fa-file";
+    	}
+	}
+    icon.setAttribute('aria-hidden', 'true');
+    icon_span.appendChild(icon);
+
+    title.innerText = decodeURIComponent(moniker);
+
     tile.href = href+name;
-    tile.appendChild(glyphicon);
+    tile.appendChild(icon_span);
     tile.appendChild(title);
     return tile;
   }
@@ -35,14 +56,10 @@ var app = function(){
     imgCache.push(file);
   }
 
-  // check if the given path points to an image
-  function isImage(path) {
-    return $.inArray(path.split('.').pop().toLowerCase(), IMG_EXTENSIONS) != -1;
-  }
-
+  // check if file should be displayed as tile
   function isValidTile(name) {
-    if (name[0] != "."){
-    return $.inArray(name, IGNORED_ELEMENTS) == -1;
+    if (name.charAt(0) != ".") {
+        return $.inArray(name, IGNORED_ELEMENTS) == -1;
     }
   }
 
