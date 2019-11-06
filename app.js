@@ -35,44 +35,64 @@ const app = function () {
         return path.slice(-1) === '/';
     }
 
-    // create a tile
-    function createTile(href, name) {
+    // create a folder tile
+    function createFolderTile(href, name) {
         const icon_span = document.createElement('span'),
             icon = document.createElement('i'),
             title = document.createElement('span'),
             tile = document.createElement('a');
-        let moniker;
 
-        if (isFolder(name)) {
-            moniker = name.slice(0, -1);
-            icon.className = "fas fa-folder";
+        // doesn't work for folders
+        // const max_len = 30;
+        // if (moniker.length > max_len) {
+        //     console.log(moniker.slice(0, max_len - 3) + '...');
+        //     moniker = moniker.slice(0, max_len - 3) + '...';
+        // }
+
+        tile.href = href + name;
+
+        icon.className = "fas fa-folder";
+        icon.setAttribute('aria-hidden', 'true');
+        icon_span.appendChild(icon);
+        tile.appendChild(icon_span);
+
+        title.innerText = decodeURIComponent(name.slice(0, -1));
+        tile.appendChild(title);
+
+        return tile;
+    }
+
+    // create a file tile
+    function createFileTile(href, name) {
+        const icon_span = document.createElement('span'),
+            icon = document.createElement('i'),
+            title = document.createElement('span'),
+            tile = document.createElement('a');
+
+        if (isImage(name)) {
+            icon.className = "fas fa-image";
+        } else if (isSomething(getExt(name), AUDIO_EXTENSIONS)) {
+            icon.className = "fas fa-audio";
+        } else if (isSomething(getExt(name), ARCHIVE_EXTENSIONS)) {
+            icon.className = "fas fa-file-archive";
+        } else if (isSomething(getExt(name), CODE_EXTENSIONS)) {
+            icon.className = "fas fa-code";
+        } else if (isSomething(getExt(name), VIDEO_EXTENSIONS)) {
+            icon.className = "fas fa-video";
+        } else if (isSomething(getExt(name), TEXT_EXTENSIONS)) {
+            icon.className = "fas fa-file-signature";
+        } else if (getExt(name) === 'pdf') {
+            icon.className = "fas fa-file-pdf";
+        } else if (isSomething(getExt(name), CONFIG_EXTENSIONS)) {
+            icon.className = "fas fa-cog";
+        } else if (isSomething(name, COMPILE_FILES) || isSomething(getExt(name), COMPILE_EXTENSIONS)) {
+            icon.className = "fas fa-hammer";
+        } else if (getExt(name) === 'py') {
+            icon.className = "fab fa-python";
+        } else if (getExt(name) === 'torrent') {
+            icon.className = "fas fa-file-download";
         } else {
-            moniker = name;
-            if (isImage(name)) {
-                icon.className = "fas fa-image";
-            } else if (isSomething(getExt(name), AUDIO_EXTENSIONS)) {
-                icon.className = "fas fa-audio";
-            } else if (isSomething(getExt(name), ARCHIVE_EXTENSIONS)) {
-                icon.className = "fas fa-file-archive";
-            } else if (isSomething(getExt(name), CODE_EXTENSIONS)) {
-                icon.className = "fas fa-code";
-            } else if (isSomething(getExt(name), VIDEO_EXTENSIONS)) {
-                icon.className = "fas fa-video";
-            } else if (isSomething(getExt(name), TEXT_EXTENSIONS)) {
-                icon.className = "fas fa-file-signature";
-            } else if (getExt(name) === 'pdf') {
-                icon.className = "fas fa-file-pdf";
-            } else if (isSomething(getExt(name), CONFIG_EXTENSIONS)) {
-                icon.className = "fas fa-cog";
-            } else if (isSomething(name, COMPILE_FILES) || isSomething(getExt(name), COMPILE_EXTENSIONS)) {
-                icon.className = "fas fa-hammer";
-            } else if (getExt(name) === 'py') {
-                icon.className = "fab fa-python";
-            } else if (getExt(name) === 'torrent') {
-                icon.className = "fas fa-file-download";
-            } else {
-                icon.className = "fas fa-file";
-            }
+            icon.className = "fas fa-file";
         }
 
         // doesn't work for folders
@@ -88,7 +108,7 @@ const app = function () {
         icon_span.appendChild(icon);
         tile.appendChild(icon_span);
 
-        title.innerText = decodeURIComponent(moniker);
+        title.innerText = decodeURIComponent(name);
         tile.appendChild(title);
 
         return tile;
@@ -138,7 +158,7 @@ const app = function () {
                 const name = element.getAttribute('href');
                 if (isValidTile(name) && isFolder(name)) {
                     $(".browser-view").append(
-                        createTile(current_dir, name));
+                        createFolderTile(current_dir, name));
                 }
             });
 
@@ -147,7 +167,7 @@ const app = function () {
                 const name = element.getAttribute('href');
                 if (isValidTile(name) && !isFolder(name)) {
                     $(".browser-view").append(
-                        createTile(current_dir, name));
+                        createFileTile(current_dir, name));
                 }
             });
 
