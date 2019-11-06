@@ -4,7 +4,9 @@ const app = function () {
         AUDIO_EXTENSIONS = ['ogg', 'opus', 'aac', 'm4a', 'mp3', 'flac', 'caf'],
         ARCHIVE_EXTENSIONS = ['tar', 'zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'lzma'],
         IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
-        CODE_EXTENSIONS = ['js', 'html', 'css', 'py', 'cpp', 'c', 'h', 'hpp'],
+        CODE_EXTENSIONS = ['js', 'html', 'css', 'py', 'cpp', 'c', 'h', 'hpp', 'tex'],
+        CODE_FILES = ['Makefile'],
+        TEXT_EXTENSIONS = ['md', 'txt'],
         VIDEO_EXTENSIONS = ['mkv', 'mp4'];
 
     let current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
@@ -53,12 +55,22 @@ const app = function () {
 
     // check if the given name points to a code file
     function isCode(name) {
-        return isSomething(getExt(name), CODE_EXTENSIONS);
+        return isSomething(getExt(name), CODE_EXTENSIONS) || isSomething(name, CODE_FILES);
     }
 
     // check if the given name points to a video file
     function isVideo(name) {
         return isSomething(getExt(name), VIDEO_EXTENSIONS);
+    }
+
+    // check if the given name points to a text file
+    function isText(name) {
+        return isSomething(getExt(name), TEXT_EXTENSIONS);
+    }
+
+    // check if the given name points to a text file
+    function isPDF(name) {
+        return getExt(name) === 'pdf';
     }
 
     // create a tile
@@ -84,6 +96,10 @@ const app = function () {
                 icon.className = "fas fa-file-code";
             } else if (isVideo(name)) {
                 icon.className = "fas fa-file-video";
+            } else if (isText(name)) {
+                icon.className = "fas fa-file-signature";
+            } else if (isPDF(name)) {
+                icon.className = "fas fa-file-pdf";
             } else {
                 icon.className = "fas fa-file";
             }
