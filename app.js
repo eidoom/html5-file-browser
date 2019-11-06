@@ -1,12 +1,13 @@
-var app = function () {
-    var base_dir = (location.pathname.replace('/index.html', '/') + "/files/").replace(/\/\//g, '/'),
-        current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
+const app = function () {
+    const base_dir = (location.pathname.replace('/index.html', '/') + "/files/").replace(/\/\//g, '/'),
         IMAGE_EXTENSIONS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'],
         AUDIO_EXTENSIONS = ['ogg', 'opus', 'aac', 'm4a', 'mp3', 'flac', 'caf'],
         ARCHIVE_EXTENSIONS = ['tar', 'zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'lzma'],
         IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
         CODE_EXTENSIONS = ['js', 'html', 'css', 'py', 'cpp', 'c', 'h', 'hpp'],
-        VIDEO_EXTENSIONS = ['mkv', 'mp4'],
+        VIDEO_EXTENSIONS = ['mkv', 'mp4'];
+
+    let current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
         imgCache = [],
         prev_img = "",
         next_img = "";
@@ -62,11 +63,11 @@ var app = function () {
 
     // create a tile
     function createTile(href, name) {
-        var icon_span = document.createElement('span'),
+        const icon_span = document.createElement('span'),
             icon = document.createElement('i'),
             title = document.createElement('span'),
-            tile = document.createElement('a'),
-            moniker;
+            tile = document.createElement('a');
+        let moniker;
 
         if (isFolder(name)) {
             moniker = name.slice(0, -1);
@@ -89,7 +90,7 @@ var app = function () {
         }
 
         // doesn't work for folders
-        // var max_len = 30;
+        // const max_len = 30;
         // if (moniker.length > max_len) {
         //     console.log(moniker.slice(0, max_len - 3) + '...');
         //     moniker = moniker.slice(0, max_len - 3) + '...';
@@ -109,7 +110,7 @@ var app = function () {
 
     // cache an image for future usage
     function cacheImage(file) {
-        for (var i = 0; i < imgCache.length; i++) {
+        for (let i = 0; i < imgCache.length; i++) {
             if (imgCache[i].src === file) return;
         }
         imgCache.push(file);
@@ -128,10 +129,10 @@ var app = function () {
 
         // show the location bar
         $(".current-dir").text('');
-        var path = current_dir.replace(base_dir, '/').split('/'),
-            temp_path = "";
-        for (var i = 0; i < path.length - 1; i++) {
-            var sub_path = document.createElement('a');
+        const path = current_dir.replace(base_dir, '/').split('/');
+        let temp_path = "";
+        for (let i = 0; i < path.length - 1; i++) {
+            const sub_path = document.createElement('a');
             temp_path += path[i] + '/';
             $(sub_path).text(path[i] + '/');
             sub_path.title = base_dir + temp_path.substring(1);
@@ -143,14 +144,15 @@ var app = function () {
 
         // retrieve the contents of the directory
         $.get(current_dir, function (data) {
-            var html = $.parseHTML(data);
+            const html = $.parseHTML(data);
             $(".browser-view").html("");
 
             // create tiles
             $(html).find("a").each(function (i, element) {
-                if (isValidTile(element.getAttribute('href'))) {
+                const name = element.getAttribute('href');
+                if (isValidTile(name)) {
                     $(".browser-view").append(
-                        createTile(current_dir, element.getAttribute('href')));
+                        createTile(current_dir, name));
                 }
             });
 
@@ -179,14 +181,14 @@ var app = function () {
         $(".file-view-img").css('padding-top', '2em');
         $(".file-view-img").attr('src', 'loader.gif');
         $(".file-view-wrapper").css('display', 'block');
-        var img = new Image();
+        const img = new Image();
         img.src = filepath;
         img.onload = function () {
             $(".file-view-img").fadeOut(0);
             $(".file-view-img").css('padding-top', '0');
             $(".file-view-img").attr('src', filepath);
             $(".file-view-img").fadeIn();
-            var scale_width = 0.8 * $(window).width() / img.width,
+            const scale_width = 0.8 * $(window).width() / img.width,
                 scale_height = 0.8 * $(window).height() / img.height,
                 imgWidth = img.width * Math.min(scale_width, scale_height),
                 imgHeight = img.height * Math.min(scale_width, scale_height);
@@ -199,7 +201,7 @@ var app = function () {
         cacheImage(filepath);
 
         // search for the previous and next image to be displayed
-        var first_img = "",
+        let first_img = "",
             last_img = "",
             img_found = false;
         prev_img = "";
