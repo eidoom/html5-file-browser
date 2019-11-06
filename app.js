@@ -35,66 +35,6 @@ const app = function () {
         return path.slice(-1) === '/';
     }
 
-    // check if the given path points to an audio file
-    function isAudio(path) {
-        return isSomething(getExt(path), AUDIO_EXTENSIONS);
-    }
-
-    // check if the given path points to an archive file
-    function isArchive(path) {
-        return isSomething(getExt(path), ARCHIVE_EXTENSIONS);
-    }
-
-    // check if the given name points to a hidden file
-    function isHidden(name) {
-        return name.charAt(0) === ".";
-    }
-
-    // check if the given name points to an ignored file name
-    function isIgnored(name) {
-        return isSomething(name, IGNORED_ELEMENTS);
-    }
-
-    // check if the given name points to a code file
-    function isCode(name) {
-        return isSomething(getExt(name), CODE_EXTENSIONS);
-    }
-
-    // check if the given name points to a compilation configuration file
-    function isCompile(name) {
-        return isSomething(name, COMPILE_FILES) || isSomething(getExt(name), COMPILE_EXTENSIONS);
-    }
-
-    // check if the given name points to a video file
-    function isVideo(name) {
-        return isSomething(getExt(name), VIDEO_EXTENSIONS);
-    }
-
-    // check if the given name points to a text file
-    function isText(name) {
-        return isSomething(getExt(name), TEXT_EXTENSIONS);
-    }
-
-    // check if the given name points to a pdf file
-    function isPDF(name) {
-        return getExt(name) === 'pdf';
-    }
-
-    // check if the given name points to a config file
-    function isConfig(name) {
-        return isSomething(getExt(name), CONFIG_EXTENSIONS);
-    }
-
-    // check if the given name points to a python file
-    function isPython(name) {
-        return getExt(name) === 'py';
-    }
-
-    // check if the given name points to a torrent file
-    function isTorrent(name) {
-        return getExt(name) === 'torrent';
-    }
-
     // create a tile
     function createTile(href, name) {
         const icon_span = document.createElement('span'),
@@ -110,25 +50,25 @@ const app = function () {
             moniker = name;
             if (isImage(name)) {
                 icon.className = "fas fa-image";
-            } else if (isAudio(name)) {
+            } else if (isSomething(getExt(path), AUDIO_EXTENSIONS)) {
                 icon.className = "fas fa-audio";
-            } else if (isArchive(name)) {
+            } else if (isSomething(getExt(path), ARCHIVE_EXTENSIONS)) {
                 icon.className = "fas fa-file-archive";
-            } else if (isCode(name)) {
+            } else if (isSomething(getExt(name), CODE_EXTENSIONS)) {
                 icon.className = "fas fa-code";
-            } else if (isVideo(name)) {
+            } else if (isSomething(getExt(name), VIDEO_EXTENSIONS)) {
                 icon.className = "fas fa-video";
-            } else if (isText(name)) {
+            } else if (isSomething(getExt(name), TEXT_EXTENSIONS)) {
                 icon.className = "fas fa-file-signature";
-            } else if (isPDF(name)) {
+            } else if (getExt(name) === 'pdf') {
                 icon.className = "fas fa-file-pdf";
-            } else if (isConfig(name)) {
+            } else if (isSomething(getExt(name), CONFIG_EXTENSIONS)) {
                 icon.className = "fas fa-cog";
-            } else if (isCompile(name)) {
+            } else if (isSomething(name, COMPILE_FILES) || isSomething(getExt(name), COMPILE_EXTENSIONS)) {
                 icon.className = "fas fa-hammer";
-            } else if (isPython(name)) {
+            } else if (getExt(name) === 'py') {
                 icon.className = "fab fa-python";
-            } else if (isTorrent(name)) {
+            } else if (getExt(name) === 'torrent') {
                 icon.className = "fas fa-file-download";
             } else {
                 icon.className = "fas fa-file";
@@ -164,7 +104,7 @@ const app = function () {
 
     // check if file should be displayed as tile
     function isValidTile(name) {
-        return !(isHidden(name) || isIgnored(name));
+        return !(name.charAt(0) === "." || isSomething(name, IGNORED_ELEMENTS));
     }
 
     // load the contents of the given directory
