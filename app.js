@@ -34,6 +34,16 @@ var app = function () {
         return $.inArray(getExt(path), ARC_EXTS) !== -1;
     }
 
+    // check if the given name points to a hidden file
+    function isHidden(name) {
+        return name.charAt(0) === ".";
+    }
+
+    // check if the given name points to an ignored file name
+    function isIgnored(name) {
+        return $.inArray(name, IGNORED_ELEMENTS) !== -1;
+    }
+
     // create a tile
     function createTile(href, name) {
         var icon_span = document.createElement('span'),
@@ -52,11 +62,18 @@ var app = function () {
             } else if (isAudio(name)) {
                 icon.className = "fas fa-file-audio";
             } else if (isArchive(name)) {
-              icon.className = "fas fa-file-archive";
+                icon.className = "fas fa-file-archive";
             } else {
                 icon.className = "fas fa-file";
             }
         }
+
+        // doesn't work for folders
+        // var max_len = 30;
+        // if (moniker.length > max_len) {
+        //     console.log(moniker.slice(0, max_len - 3) + '...');
+        //     moniker = moniker.slice(0, max_len - 3) + '...';
+        // }
 
         tile.href = href + name;
 
@@ -80,9 +97,7 @@ var app = function () {
 
     // check if file should be displayed as tile
     function isValidTile(name) {
-        if (name.charAt(0) !== ".") {
-            return $.inArray(name, IGNORED_ELEMENTS) === -1;
-        }
+        return !(isHidden(name) || isIgnored(name));
     }
 
     // load the contents of the given directory
@@ -121,7 +136,7 @@ var app = function () {
 
             // add events to tiles
             $(".browser-view a").each(function (i, element) {
-                if (element.pathname.slice(-1) === "/") {
+                if (isFolder(element.pathname)) {
                     // open directories
                     $(element).on("click", function (e) {
                         e.preventDefault();
@@ -186,8 +201,12 @@ var app = function () {
                 last_img = element.pathname;
             }
         });
-        if (next_img === "") next_img = first_img;
-        if (prev_img === "") prev_img = last_img;
+        if (next_img === "") {
+            next_img = first_img;
+        }
+        if (prev_img === "") {
+            prev_img = last_img;
+        }
     }
 
     // close the image preview
