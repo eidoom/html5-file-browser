@@ -1,10 +1,11 @@
 var app = function () {
     var base_dir = (location.pathname.replace('/index.html', '/') + "/files/").replace(/\/\//g, '/'),
         current_dir = (base_dir + location.hash.substring(1) + '/').replace(/\/\//g, '/'),
-        IMG_EXTS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'],
-        AUD_EXTS = ['ogg', 'opus', 'aac', 'm4a', 'mp3', 'flac', 'caf'],
-        ARC_EXTS = ['tar', 'zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'lzma'],
+        IMAGE_EXTENSIONS = ['bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'png'],
+        AUDIO_EXTENSIONS = ['ogg', 'opus', 'aac', 'm4a', 'mp3', 'flac', 'caf'],
+        ARCHIVE_EXTENSIONS = ['tar', 'zip', 'rar', '7z', 'gz', 'bz2', 'xz', 'lzma'],
         IGNORED_ELEMENTS = ['../', 'Name', 'Last modified', 'Size', 'Description', 'Parent Directory'],
+        CODE_EXTENSIONS = ['js', 'html', 'css', 'py', 'cpp', 'c', 'h', 'hpp'],
         imgCache = [],
         prev_img = "",
         next_img = "";
@@ -14,9 +15,13 @@ var app = function () {
         return path.split('.').pop().toLowerCase();
     }
 
+    function isSomething(name, thing) {
+        return $.inArray(name, thing) !== -1;
+    }
+
     // check if the given path points to an image
     function isImage(path) {
-        return $.inArray(getExt(path), IMG_EXTS) !== -1;
+        return isSomething(getExt(path), IMAGE_EXTENSIONS);
     }
 
     // check if the given path points to a folder
@@ -26,12 +31,12 @@ var app = function () {
 
     // check if the given path points to an audio file
     function isAudio(path) {
-        return $.inArray(getExt(path), AUD_EXTS) !== -1;
+        return isSomething(getExt(path), AUDIO_EXTENSIONS);
     }
 
     // check if the given path points to an archive file
     function isArchive(path) {
-        return $.inArray(getExt(path), ARC_EXTS) !== -1;
+        return isSomething(getExt(path), ARCHIVE_EXTENSIONS);
     }
 
     // check if the given name points to a hidden file
@@ -41,7 +46,12 @@ var app = function () {
 
     // check if the given name points to an ignored file name
     function isIgnored(name) {
-        return $.inArray(name, IGNORED_ELEMENTS) !== -1;
+        return isSomething(name, IGNORED_ELEMENTS);
+    }
+
+    // check if the given name points to an ignored file name
+    function isCode(name) {
+        return isSomething(getExt(name), CODE_EXTENSIONS);
     }
 
     // create a tile
@@ -63,6 +73,8 @@ var app = function () {
                 icon.className = "fas fa-file-audio";
             } else if (isArchive(name)) {
                 icon.className = "fas fa-file-archive";
+            } else if (isCode(name)) {
+                icon.className = "fas fa-file-code";
             } else {
                 icon.className = "fas fa-file";
             }
