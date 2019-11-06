@@ -133,10 +133,19 @@ const app = function () {
             const html = $.parseHTML(data);
             $(".browser-view").html("");
 
-            // create tiles
+            // create tiles for folders
             $(html).find("a").each(function (i, element) {
                 const name = element.getAttribute('href');
-                if (isValidTile(name)) {
+                if (isValidTile(name) && isFolder(name)) {
+                    $(".browser-view").append(
+                        createTile(current_dir, name));
+                }
+            });
+
+            // create tiles for files
+            $(html).find("a").each(function (i, element) {
+                const name = element.getAttribute('href');
+                if (isValidTile(name) && !isFolder(name)) {
                     $(".browser-view").append(
                         createTile(current_dir, name));
                 }
