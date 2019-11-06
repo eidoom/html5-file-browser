@@ -144,7 +144,7 @@ const app = function () {
             // create tiles for folders
             $(html).find("a").each(function (i, element) {
                 const name = element.getAttribute('href');
-                if (isValidTile(name) && isFolder(name)) {
+                if (isFolder(name) && isValidTile(name)) {
                     $(".browser-view").append(
                         createFolderTile(current_dir, name));
                 }
@@ -153,7 +153,7 @@ const app = function () {
             // create tiles for files
             $(html).find("a").each(function (i, element) {
                 const name = element.getAttribute('href');
-                if (isValidTile(name) && !isFolder(name)) {
+                if (!isFolder(name) && isValidTile(name)) {
                     $(".browser-view").append(
                         createFileTile(current_dir, name));
                 }
